@@ -52,12 +52,13 @@ static void write_tile_vertexes(GLfloat x, GLfloat y, GLfloat *vertex, float d)
 
 renderer_cool::renderer_cool()
 {
-    dummy = 'TWBT';
+    dummy = TWBT_MAGIC_IDENT;
     gvertexes = 0, gfg = 0, gtex = 0;
     gdimx = 0, gdimy = 0, gdimxfull = 0, gdimyfull = 0;
     gdispx = 0, gdispy = 0;
     goff_x = 0, goff_y = 0, gsize_x = 0, gsize_y = 0;
-    needs_reshape = needs_zoom = 0;
+    needs_reshape = reshape_none;
+    needs_zoom = 0;
     map_cache = 0;
 }
 
@@ -171,12 +172,16 @@ void renderer_cool::reshape_graphics()
     if (df::viewscreen_dwarfmodest::_identity.is_direct_instance(ws))
         goff_y_gl = goff_y - (gdimy == gdimyfull ? 0 : roundf(gdispy - (gsize_y - gdispy * gdimyfull)));                
 
-    *df::global::window_x = std::max(0, cx - gdimx / 2);
-    *df::global::window_y = std::max(0, cy - gdimy / 2);
+    if (needs_reshape == reshape_all)
+    {
+        *df::global::window_x = std::max(0, cx - gdimx / 2);
+        *df::global::window_y = std::max(0, cy - gdimy / 2);
+    }
 
     int tiles = gdimx * gdimy;
     init_buffers_and_coords(tiles, gdimy + 1);
 
+    needs_reshape = reshape_none;
     needs_full_update = true;
 }
 
@@ -685,11 +690,11 @@ void renderer_cool::reshape_zoom_swap()
     static int game_mode = 3;
     if (game_mode != *df::global::gamemode)
     {
-        needs_reshape = true;
+        needs_reshape = reshape_all;
         game_mode = *df::global::gamemode;
     }
 
-    if (needs_reshape)
+    if (needs_reshape != reshape_none)
     {
         if (needs_zoom)
         {
@@ -709,7 +714,6 @@ void renderer_cool::reshape_zoom_swap()
             needs_zoom = 0;
         }
         
-        needs_reshape = false;
         reshape_graphics();
         gps->force_full_display_count = 1;
         DFHack::Gui::getCurViewscreen()->resize(gps->dimx, gps->dimy);
@@ -752,7 +756,7 @@ void renderer_cool::zoom(df::zoom_commands cmd)
         return;
     }
 
-    needs_reshape = true;
+    needs_reshape = reshape_all;
 }
 
 extern "C" {

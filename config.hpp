@@ -577,7 +577,7 @@ static bool load_overrides()
                 int idx = tilesets.size() - 1;
                 string n = (tokens.size() == 4) ?
                     tokens[3] :
-                    static_cast<std::ostringstream*>(&(std::ostringstream() << idx))->str();
+                    int_to_string(idx);
                 tilesetnames[n] = idx;
             }
 

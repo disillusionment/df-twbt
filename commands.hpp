@@ -47,13 +47,16 @@ command_result multilevel_cmd (color_ostream &out, std::vector <std::string> & p
 
         else if (param0 == "fogcolor" && pcnt >= 4)
         {
-            float c[3];
+            float c[4];
             bool ok = parse_float(parameters[1], c[0]) &&
                       parse_float(parameters[2], c[1]) &&
                       parse_float(parameters[3], c[2]);
 
             if (ok)
+            {
+                c[3] = 0;
                 memcpy(fogcolor, c, sizeof(fogcolor));
+            }
             else
                 return CR_WRONG_USAGE;
         }
@@ -158,7 +161,7 @@ command_result twbt_cmd (color_ostream &out, std::vector <std::string> & paramet
                 r->gdispx++;
                 r->gdispy++;
 
-                r->needs_reshape = true;
+                r->needs_reshape = reshape_all;
             }
             else if (parameters[1] == "smaller")
             {
@@ -167,7 +170,7 @@ command_result twbt_cmd (color_ostream &out, std::vector <std::string> & paramet
                     r->gdispx--;
                     r->gdispy--;
 
-                    r->needs_reshape = true;
+                    r->needs_reshape = reshape_all;
                 }
             }
 
@@ -176,7 +179,7 @@ command_result twbt_cmd (color_ostream &out, std::vector <std::string> & paramet
                 r->gdispx = enabler->fullscreen ? small_map_dispx : large_map_dispx;
                 r->gdispy = enabler->fullscreen ? small_map_dispy : large_map_dispy;
 
-                r->needs_reshape = true;                    
+                r->needs_reshape = reshape_all;                    
             }
 
             else if (parameters[1][0] == '+' || parameters[1][0] == '-')
@@ -188,7 +191,7 @@ command_result twbt_cmd (color_ostream &out, std::vector <std::string> & paramet
                 r->gdispx += delta;
                 r->gdispy += delta;
 
-                r->needs_reshape = true;
+                r->needs_reshape = reshape_all;
             }
 
             else if (pcnt >= 3)
@@ -201,7 +204,7 @@ command_result twbt_cmd (color_ostream &out, std::vector <std::string> & paramet
                 {
                     r->gdispx = w;
                     r->gdispy = h;
-                    r->needs_reshape = true;
+                    r->needs_reshape = reshape_all;
                 }
                 else
                     return CR_WRONG_USAGE;   

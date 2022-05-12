@@ -22,6 +22,15 @@ struct _renderer_opengl : public df::renderer
 };
 typedef _renderer_opengl renderer_opengl; // This is to make Linux happy
 
+const uint32_t TWBT_MAGIC_IDENT = 0x54574254;
+
+enum reshape_status
+{
+    reshape_none,
+    reshape_sidebar,
+    reshape_all,
+};
+
 struct renderer_cool : renderer_opengl
 {
     uint32_t dummy;
@@ -30,7 +39,7 @@ struct renderer_cool : renderer_opengl
     int gdimx, gdimy, gdimxfull, gdimyfull;
     int gdispx, gdispy;
     float goff_x, goff_y, gsize_x, gsize_y;
-    bool needs_reshape;
+    reshape_status needs_reshape;
     int needs_zoom;
     bool needs_full_update;
     unsigned char *gscreen;
@@ -66,7 +75,7 @@ struct renderer_cool : renderer_opengl
     virtual void _last_vmethod() {};
 
     bool is_twbt() {
-        return (this->dummy == 'TWBT');
+        return (this->dummy == TWBT_MAGIC_IDENT);
     };
 
     void output_string(int8_t color, int x, int y, std::string str)

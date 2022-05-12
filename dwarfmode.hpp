@@ -40,7 +40,7 @@ struct dwarfmode_hook : public df::viewscreen_dwarfmodest
         if (gmenu_w != menu_w_new)
         {
             gmenu_w = menu_w_new;
-            r->needs_reshape = true;
+            r->needs_reshape = reshape_sidebar;
         }
     }
 
@@ -70,7 +70,7 @@ struct dwarfmode_hook : public df::viewscreen_dwarfmodest
         if (gmenu_w < 0)
         {
             gmenu_w = get_menu_width();
-            r->needs_reshape = true;
+            r->needs_reshape = reshape_sidebar;
         }
 
         r->reshape_zoom_swap();
