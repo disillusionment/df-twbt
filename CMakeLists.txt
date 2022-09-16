@@ -9,7 +9,7 @@ SET( CMAKE_CXX_FLAGS "-m64 -O3 -DDFHACK_VERSION=\"${DFHACK_VERSION}\" -DDF_${DV_
 
 IF( APPLE )
   IF(CMAKE_COMPILER_IS_GNUCXX)
-    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x -Wno-multichar -framework OpenGL -undefined dynamic_lookup" )
+    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x -Wno-multichar -framework OpenGL -undefined dynamic_lookup -Wno-unused-result" )
   ELSE()
     SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x -stdlib=libstdc++ -Wno-tautological-compare -framework OpenGL -mmacosx-version-min=10.6 -undefined dynamic_lookup" )
   ENDIF()
