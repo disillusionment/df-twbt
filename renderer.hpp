@@ -1,5 +1,7 @@
 #pragma once
 
+#include "modules/Renderer.h"
+
 #include "png++/png.hpp"
 #include "png++/solid_pixel_buffer_rev.hpp"
 
@@ -767,7 +769,8 @@ extern "C" {
 
 bool renderer_cool::get_mouse_coords(int32_t *x, int32_t *y)
 {
-    if (!screen_map_type)
+    if (!screen_map_type ||
+            (*x == DFHack::Renderer::GET_MOUSE_COORDS_SENTINEL && *y == (int32_t)true))
         return get_mouse_coords_old(x, y);
 
     int mouse_x, mouse_y;
@@ -779,7 +782,7 @@ bool renderer_cool::get_mouse_coords(int32_t *x, int32_t *y)
     int _x = (float) mouse_x / gdispx + 1;
     int _y = (float) mouse_y / gdispy + 1;
 
-    if (_x < 0 || _y < 0 || _x > gps->dimx || _y > gps->dimy)
+    if (_x < 1 || _y < 1 || _x > gdimx || _y > gdimy)
         return false;
 
     *x = _x;
