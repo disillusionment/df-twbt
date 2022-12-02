@@ -165,13 +165,6 @@ struct tile_overrides {
     bool has_material_overrides = false;
 };
 
-inline string int_to_string(const int n)
-{
-    std::ostringstream ss;
-    ss << n;
-    return ss.str();
-}
-
 static struct tile_overrides *overrides[256];
 
 long *text_texpos, *map_texpos;
