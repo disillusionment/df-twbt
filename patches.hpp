@@ -1473,6 +1473,21 @@ static void apply_patch(MemoryPatcher *mp, patchdef &p)
         static patchdef p_render_lower_levels = {
             0x100eca2e0, 5, true, { 0x41, 0xc6, 0x00, 0x00, 0xc3 }
         };
+
+   #elif defined(__i386__) // restores support for 32bit Dwarf Fortress/dfhack
+        #define A_RENDER_MAP       0x08c868d0
+        #define A_RENDER_UPDOWN    0x08a0bd10
+        #define NO_DISPLAY_PATCH
+
+        static patchdef p_dwarfmode_render = { 0x412da2, 5 };
+
+        static patchdef p_advmode_render[] = {
+            { 0x083e9662, 5+7+5 }, { 0x083e971a, 5+7+5 }, { 0x083e9dd4, 5+7+5 }, { 0x083ea1d0, 5+7+5 }
+        };
+
+        static patchdef p_render_lower_levels = {
+            0x08f7e350, 5, true, { 0x41, 0xc6, 0x00, 0x00, 0xc3 }
+        };
     #else
         #define A_RENDER_MAP       0xeca570
         #define A_RENDER_UPDOWN    0xc8a1a0
